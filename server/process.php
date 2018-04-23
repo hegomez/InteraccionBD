@@ -35,8 +35,9 @@
 	{
 		//Crear Usuarios
 		$UserData=array();
-		$UserData[]=array("HEINER GOMEZ","he.gomez@hotmail.com","12345","1989-03-23");
-		$UserData[]=array("LORAINE GUTIERREZ","lorigut@hotmail.com","54321","1997-10-04");
+		$UserData[]=array("HEINER GOMEZ VILLARREAL","he.gomez@hotmail.com","12345","1989-03-23");
+		$UserData[]=array("LORAINE GUTIERREZ AVENDANIO","lorigut@hotmail.com","54321","1997-10-04");
+		$UserData[]=array("BENJAMIN GOMEZ GUTIERREZ","benjigg@hotmail.com","13579","20017-11-03");
 		foreach ($UserData as $value)
 		{
 			$PWD=sha1($value[2]);
@@ -49,6 +50,24 @@
 	if(isset($_GET['jsoncallback']) && !empty($_GET['jsoncallback']))
 	{
 		$array=array();
+		if(isset($_GET['ChargarEventos']) && !empty($_GET['ChargarEventos']))
+		{
+			$res=$bd->query("SELECT * FROM `eventos` WHERE user=".$_GET['ChargarEventos']);
+			if($res->num_rows>=1)
+			{
+				while($Row_Eventos=$res->fetch_array())
+				{
+					$array[]=array(
+						"title"=>$Row_Eventos[1],
+						"start"=>$Row_Eventos[2],
+						"end"=>$Row_Eventos[4]
+					);
+				}
+			}
+			//title: 'Long Event',
+			//start: '2018-03-07',
+			//end: '2018-03-10'
+		}
 		if(isset($_GET['user']) && isset($_GET['pass']))
 		{
 			$email="'".$_GET["user"]."'";
@@ -66,6 +85,6 @@
 				$array['rta']='ERR';
 			}
 		}
-		echo $_GET['jsoncallback'].'('.json_encode($array).')';
+		echo json_encode($array);
 	}
 ?>
