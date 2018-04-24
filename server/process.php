@@ -47,9 +47,18 @@
 	}
 
 	//Carga de Infomracion del Usuario
-	if(isset($_GET['jsoncallback']) && !empty($_GET['jsoncallback']))
+	if(isset($_GET['jsoncallback1']) && !empty($_GET['jsoncallback1']))
 	{
-		$array=array();
+		$data=array();
+		if(isset($_GET['EditarEvento']) && !empty($_GET['EditarEvento']))
+		{
+			$tmp=explode("-", $_GET['IdEvento'][0]);
+			$id=$tmp[1];
+			$f_ini="'".$_GET['nFini']."'";
+			empty($_GET['nFfin']) ? $f_fin="'".$_GET['nFini']."'" : $f_fin="'".$_GET['nFfin']."'";
+			//die("UPDATE eventos set `f_ini`=$f_ini,`f_fin`=$f_fin where `id`=$id");
+			$bd->query("UPDATE eventos set `f_ini`=$f_ini,`f_fin`=$f_fin where `id`=$id");
+		}
 		if(isset($_GET['AmacenarEvento']) && !empty($_GET['AmacenarEvento']))
 		{
 			$tiutlo=prepare($_GET['titulo'],'text',$bd);
@@ -60,21 +69,6 @@
 			$user=prepare($_GET['IdUser'],'int',$bd);
 			$bd->query("INSERT INTO eventos (`tiutlo`,`f_ini`,`h_ini`,`f_fin`,`h_fin`,`user`) VALUES ($tiutlo,$f_ini,$h_ini,$f_fin,$h_fin,$user)");
 			$array['rta']='OK';
-		}
-		if(isset($_GET['ChargarEventos']) && !empty($_GET['ChargarEventos']))
-		{
-			$res=$bd->query("SELECT * FROM `eventos` WHERE user=".$_GET['ChargarEventos']);
-			if($res->num_rows>=1)
-			{
-				while($Row_Eventos=$res->fetch_array())
-				{
-					$array[]=array(
-						"title"=>$Row_Eventos[1],
-						"start"=>$Row_Eventos[2],
-						"end"=>$Row_Eventos[4]
-					);
-				}
-			}
 		}
 		if(isset($_GET['user']) && isset($_GET['pass']))
 		{
@@ -91,6 +85,28 @@
 			else
 			{
 				$array['rta']='ERR';
+			}
+		}
+		echo $_GET['jsoncallback1'].'('.json_encode($data).')';
+	}
+	//Carga de Infomracion del Usuario
+	if(isset($_GET['jsoncallback']) && !empty($_GET['jsoncallback']))
+	{
+		$array=array();
+		if(isset($_GET['ChargarEventos']) && !empty($_GET['ChargarEventos']))
+		{
+			$res=$bd->query("SELECT * FROM `eventos` WHERE user=".$_GET['ChargarEventos']);
+			if($res->num_rows>=1)
+			{
+				while($Row_Eventos=$res->fetch_array())
+				{
+					$array[]=array(
+						"title"=>$Row_Eventos[1],
+						"start"=>$Row_Eventos[2],
+						"end"=>$Row_Eventos[4],
+						"className"=>'id-'.$Row_Eventos[0]
+					);
+				}
 			}
 		}
 		echo json_encode($array);

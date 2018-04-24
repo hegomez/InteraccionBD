@@ -73,6 +73,7 @@
 	
 	<script src='js/moment.min.js'></script>
 <script src='js/jquery.js'></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src='js/fullcalendar.min.js'></script>
 <script>
 	var pathname = window.location.href;
@@ -83,6 +84,35 @@
 			defaultDate: '2018-04-01',
 			editable: true,
 			eventLimit: true, // allow "more" link when too many events
+			eventDrop: function(event, delta, revertFunc)
+			{
+    			/*alert(event.title + " was dropped on " + event.start.format());
+    			alert(event.start.format());
+    			$.each( event, function( key, value ) {
+					alert( key + ": " + value );
+				});*/
+    			if (confirm("Desea realizar este cambio?"))
+    			{
+    				var IdEvento=event.className;
+					var nFini=event.start.format();
+					if(!event.end)
+					{
+						var nFfin=nFini;
+					}
+					else
+					{
+						var nFfin=event.end.format();
+					}
+					var EditarEvento="wet";
+      				$.getJSON( "../server/process.php?jsoncallback1=?", { EditarEvento:EditarEvento,IdEvento:IdEvento,nFfin:nFfin,nFini:nFini})
+					.done(function(D) {	});
+					setTimeout(function(){location.reload(true)}, 500);
+    			}
+    			else
+    			{
+    				revertFunc();
+    			}
+  			},
 			events: {url: 'http://localhost/InteraccionBD/server/process.php?jsoncallback=1&ChargarEventos='+IdUser}
 		});
 		$("#allDay").click(function(){
@@ -115,6 +145,12 @@
 				setTimeout(function(){location.reload(true)}, 500);
 			}
 		});
+		$(".fc-event-container a").draggable();
+		$(".delete-btn").droppable({
+      		drop: function( event, ui ) {
+        		alert(888);
+      		}
+    	});
 	});
 </script>
 </body>
