@@ -73,24 +73,24 @@
 	
 	<script src='js/moment.min.js'></script>
 <script src='js/jquery.js'></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src='js/fullcalendar.min.js'></script>
 <script>
 	var pathname = window.location.href;
 	var IdUser=pathname.charAt(pathname.length-1);
 	var archivoValidacion = "../server/process.php?jsoncallback=?";
+	var GlobEvento;
+	$(document).on("click mousedown",".fc-content",function(){
+		GlobEvento=$(this).children().text();
+	});
+
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
 			defaultDate: '2018-04-01',
 			editable: true,
+			droppable: true,
 			eventLimit: true, // allow "more" link when too many events
 			eventDrop: function(event, delta, revertFunc)
 			{
-    			/*alert(event.title + " was dropped on " + event.start.format());
-    			alert(event.start.format());
-    			$.each( event, function( key, value ) {
-					alert( key + ": " + value );
-				});*/
     			if (confirm("Desea realizar este cambio?"))
     			{
     				var IdEvento=event.className;
@@ -140,16 +140,19 @@
 			else
 			{
 				var AmacenarEvento='SET';
-				$.getJSON( archivoValidacion, { AmacenarEvento:AmacenarEvento,start_date:start_date,end_date:end_date,start_hour:start_hour,end_hour:end_hour,titulo:titulo,IdUser:IdUser })
+				$.getJSON( "../server/process.php?jsoncallback1=?", { AmacenarEvento:AmacenarEvento,start_date:start_date,end_date:end_date,start_hour:start_hour,end_hour:end_hour,titulo:titulo,IdUser:IdUser })
 				.done(function(D) {	});
 				setTimeout(function(){location.reload(true)}, 500);
 			}
 		});
-		$(".fc-event-container a").draggable();
-		$(".delete-btn").droppable({
-      		drop: function( event, ui ) {
-        		alert(888);
-      		}
+		$(".delete-btn").mouseover(function(){
+        	confirm("Desea eliminar este evento")
+        	{
+        		var Eliminar=GlobEvento.split("-");
+        		$.getJSON( "../server/process.php?jsoncallback1=?", { EliminarEvento:Eliminar[0] })
+				.done(function(D) {	});
+				setTimeout(function(){location.reload(true)}, 500);
+        	}
     	});
 	});
 </script>

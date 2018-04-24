@@ -37,7 +37,7 @@
 		$UserData=array();
 		$UserData[]=array("HEINER GOMEZ VILLARREAL","he.gomez@hotmail.com","12345","1989-03-23");
 		$UserData[]=array("LORAINE GUTIERREZ AVENDANIO","lorigut@hotmail.com","54321","1997-10-04");
-		$UserData[]=array("BENJAMIN GOMEZ GUTIERREZ","benjigg@hotmail.com","13579","20017-11-03");
+		$UserData[]=array("BENJAMIN GOMEZ GUTIERREZ","benjigg@hotmail.com","13579","2017-11-03");
 		foreach ($UserData as $value)
 		{
 			$PWD=sha1($value[2]);
@@ -50,6 +50,10 @@
 	if(isset($_GET['jsoncallback1']) && !empty($_GET['jsoncallback1']))
 	{
 		$data=array();
+		if(isset($_GET['EliminarEvento']) && !empty($_GET['EliminarEvento']))
+		{
+			$bd->query("Delete from eventos where `id`=".$_GET['EliminarEvento']);
+		}
 		if(isset($_GET['EditarEvento']) && !empty($_GET['EditarEvento']))
 		{
 			$tmp=explode("-", $_GET['IdEvento'][0]);
@@ -68,23 +72,22 @@
 			$h_fin=prepare($_GET['end_hour'],'date',$bd);
 			$user=prepare($_GET['IdUser'],'int',$bd);
 			$bd->query("INSERT INTO eventos (`tiutlo`,`f_ini`,`h_ini`,`f_fin`,`h_fin`,`user`) VALUES ($tiutlo,$f_ini,$h_ini,$f_fin,$h_fin,$user)");
-			$array['rta']='OK';
+			$data['rta']='OK';
 		}
 		if(isset($_GET['user']) && isset($_GET['pass']))
 		{
 			$email="'".$_GET["user"]."'";
 			$contrasena="'".sha1($_GET["pass"])."'";
-			//die("SELECT `id` FROM `usuarios` WHERE `email`=$email AND `contrasena`=$contrasena");
 			$res=$bd->query("SELECT `id` FROM `usuarios` WHERE `email`=$email AND `contrasena`=$contrasena");
 			if($res->num_rows>=1)
 			{
 				$R=$res->fetch_assoc();
-				$array['id']=$R['id'];
-				
+				$data['id']=$R['id'];
+				$data['rta']='OK';
 			}
 			else
 			{
-				$array['rta']='ERR';
+				$data['rta']='ERR';
 			}
 		}
 		echo $_GET['jsoncallback1'].'('.json_encode($data).')';
@@ -101,7 +104,7 @@
 				while($Row_Eventos=$res->fetch_array())
 				{
 					$array[]=array(
-						"title"=>$Row_Eventos[1],
+						"title"=>$Row_Eventos[0].'-'.$Row_Eventos[1],
 						"start"=>$Row_Eventos[2],
 						"end"=>$Row_Eventos[4],
 						"className"=>'id-'.$Row_Eventos[0]

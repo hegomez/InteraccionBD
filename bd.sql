@@ -21,12 +21,13 @@ USE `nextu_bd`;
 DROP TABLE IF EXISTS `eventos`;
 
 CREATE TABLE `eventos` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `tiutlo` varchar(255) NOT NULL,
   `f_ini` date NOT NULL,
   `h_ini` time DEFAULT NULL,
   `f_fin` date DEFAULT NULL,
   `h_fin` time DEFAULT NULL,
+  `user` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
