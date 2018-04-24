@@ -50,6 +50,17 @@
 	if(isset($_GET['jsoncallback']) && !empty($_GET['jsoncallback']))
 	{
 		$array=array();
+		if(isset($_GET['AmacenarEvento']) && !empty($_GET['AmacenarEvento']))
+		{
+			$tiutlo=prepare($_GET['titulo'],'text',$bd);
+			$f_ini=prepare($_GET['start_date'],'date',$bd);
+			$h_ini=prepare($_GET['start_hour'],'date',$bd);
+			$f_fin=prepare($_GET['end_date'],'date',$bd);
+			$h_fin=prepare($_GET['end_hour'],'date',$bd);
+			$user=prepare($_GET['IdUser'],'int',$bd);
+			$bd->query("INSERT INTO eventos (`tiutlo`,`f_ini`,`h_ini`,`f_fin`,`h_fin`,`user`) VALUES ($tiutlo,$f_ini,$h_ini,$f_fin,$h_fin,$user)");
+			$array['rta']='OK';
+		}
 		if(isset($_GET['ChargarEventos']) && !empty($_GET['ChargarEventos']))
 		{
 			$res=$bd->query("SELECT * FROM `eventos` WHERE user=".$_GET['ChargarEventos']);
@@ -64,9 +75,6 @@
 					);
 				}
 			}
-			//title: 'Long Event',
-			//start: '2018-03-07',
-			//end: '2018-03-10'
 		}
 		if(isset($_GET['user']) && isset($_GET['pass']))
 		{
@@ -78,7 +86,7 @@
 			{
 				$R=$res->fetch_assoc();
 				$array['id']=$R['id'];
-				$array['rta']='OK';
+				
 			}
 			else
 			{
