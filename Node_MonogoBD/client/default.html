@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8' />
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Agenda</title>
+		<link href='css/fullcalendar.min.css' rel='stylesheet' />
+		<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+		<link rel="stylesheet" href="css/index.css"/>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="css/loader.css">
+	</head>
+	<body>
+		<div class="headerCalendar">Agenda</div>
+		<div class="dataContainer">
+			<div class="calendarDataContainer">
+				<div class="mainCalendarContainer">
+					<div class="calendarContainer">
+						<div id='calendar'></div>
+					</div>
+				</div>
+			</div>
+			<div class="formContainer">
+				<div class="formTitle">Programar Evento</div>
+				<div class="separator"></div>
+				<div class="form-inputs">
+					<input type="text" id="titulo" placeholder="Nombre del evento"/>
+					<input type="date" id="start_date" placeholder="Fecha de inicio"/>
+					<div class="eventDuration">
+						<input type="checkbox" id="allDay" class="radio-input"/>
+						<label class="duration-label" for="allDay">Día completo</label>
+					</div>
+					<input type="date" id="end_date" placeholder="Fecha fin"/>
+					<div class="form-group">
+						<input type="time" id="start_hour" placeholder="Hora de inicio" class="timepicker hour-input left"/>
+						<input type="time" id="end_hour" placeholder="Hora fin" class="timepicker hour-input right"/>
+					</div>
+					<button id="save" class="addButton">Añadir evento</button>
+				</div>
+				<div id="deleteEvent" class="delete">
+					<div class="drop-event">Eliminar evento</div>
+					<img src="../img/delete.png"/>
+				</div>
+				<div class="logout-container">
+					<img class="logout-image" src="../img/logout.png"/>
+					<div class="logoutText" id="logout">Cerrar Sesión</div>
+				</div>
+			</div>
+		</div>
+	<script src='js/moment.min.js'></script>
+	<script src='js/jquery.min.js'></script>
+	<script src='js/fullcalendar.min.js'></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script>
+
+		$(document).ready(function() {
+
+			$('#calendar').fullCalendar({
+				defaultDate: '2018-03-12',
+				editable: true,
+				eventLimit: true, // allow "more" link when too many events
+				events: [
+					{
+						title: 'All Day Event',
+						start: '2018-03-01'
+					},
+					{
+						title: 'Long Event',
+						start: '2018-03-07',
+						end: '2018-03-10'
+					},
+					{
+						id: 999,
+						title: 'Repeating Event',
+						start: '2018-03-09T16:00:00'
+					},
+					{
+						id: 999,
+						title: 'Repeating Event',
+						start: '2018-03-16T16:00:00'
+					},
+					{
+						title: 'Conference',
+						start: '2018-03-11',
+						end: '2018-03-13'
+					},
+					{
+						title: 'Meeting',
+						start: '2018-03-12T10:30:00',
+						end: '2018-03-12T12:30:00'
+					},
+					{
+						title: 'Lunch',
+						start: '2018-03-12T12:00:00'
+					},
+					{
+						title: 'Meeting',
+						start: '2018-03-12T14:30:00'
+					},
+					{
+						title: 'Happy Hour',
+						start: '2018-03-12T17:30:00'
+					},
+					{
+						title: 'Dinner',
+						start: '2018-03-12T20:00:00'
+					},
+					{
+						title: 'Birthday Party',
+						start: '2018-03-13T07:00:00'
+					},
+					{
+						title: 'Click for Google',
+						url: 'http://google.com/',
+						start: '2018-03-28'
+					}
+				]
+			});
+
+		});
+
+	</script>
+
+
+</body>
+</html>
